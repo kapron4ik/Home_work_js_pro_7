@@ -17,8 +17,10 @@ const Mediator = () => {
     answerTheQuestion( student, question ){
       if( student.type !== 'monitor'){
         console.error('It\' not your bussines');
+        return 'It\' not your bussines';
       } else {
         console.log('Yes, my dear?!');
+        return 'Yes, my dear?!';
       }
     }
   }
@@ -28,13 +30,12 @@ const Mediator = () => {
       this.name = name;
       this.type = 'nerd';
       this.monitor = null;
-      this.professor = null;
 
       console.log(`New student ${this.name} enrolled`);
     }
     //получить ответ
     getAnswer(answer, from){
-      console.log(`${from.name} to ${this.name}: ${answer}`)
+      console.log(`${from.name} to ${this.name} professor said: ${answer}`)
     }
     //задать вопрос
     tipTheMonitor(question){
@@ -43,37 +44,34 @@ const Mediator = () => {
     }
   }
 
+
   // Monitor == Староста
   class Monitor extends Student{
-    constructor(name){
+    constructor(name, professor){
       super(name);
       this.type = 'monitor';
       this.group = {};
-
+      this.professor = professor;
     }
     //добавить в группу
     addToGroup(student){
       this.group[student.name] = student;
       student.monitor = this;
-      student.professor = new Professor;
-
     }
     //спросить проффесора
     askProfessor(question, student){
-      this.professor.answerTheQuestion( this, question );
-      student.getAnswer('Proffesor ready to answer any question', this)
+      let answer = this.professor.answerTheQuestion( this, question );
+      student.getAnswer(answer, this)
     }
   }
-
+  const Prof = new Professor();
   let Pavel = new Student ('Pavel');
-  let Viktor = new Monitor ('Viktor');
+  let Viktor = new Monitor ('Viktor', Prof);
   Viktor.addToGroup(Viktor);
   Viktor.addToGroup(Pavel);
 
   console.log ('Pavel',Pavel)
-  // console.log ('Viktor',Viktor)
 
-  // Pavel.professor.answerTheQuestion( Viktor, 'How are you?' );
   Pavel.tipTheMonitor('How are you?');
 }
 
